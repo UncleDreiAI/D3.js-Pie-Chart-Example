@@ -1,0 +1,101 @@
+RowID,Fruit,Color,Taste,Type,AvgCost,QtyPck,HarvestLocation
+1,Strawberry,Red,Sweet,Berry,"2.00",10,USA
+2,Raspberry,Red,Sweet,Berry,"3.00",8,Canada
+3,Blueberry,Blue,Sweet,Berry,"1.50",15,USA
+4,Blackberry,Black,Sweet,Berry,"2.50",10,Mexico
+5,Acai berry,Purple,Sweet,Berry,"4.00",5,Brazil
+6,Goji berry,Red,Sweet,Berry,"5.00",8,China
+7,Orange,Orange,Sweet,Citrus,"1.00",4,Spain
+8,Lemon,Yellow,Sour,Citrus,"0.75",6,USA
+9,Lime,Green,Sour,Citrus,"0.80",6,Mexico
+10,Grapefruit,Pink,Bitter,Citrus,"1.25",2,USA
+11,Tangerine,Orange,Sweet,Citrus,"1.20",5,Spain
+12,Pomelo,Green,Sweet,Citrus,"1.50",1,China
+13,Peach,Orange,Sweet,Stone Fruit,"2.00",4,USA
+14,Cherry,Red,Sweet,Stone Fruit,"3.00",20,USA
+15,Plum,Purple,Sweet,Stone Fruit,"1.80",5,France
+16,Apricot,Orange,Sweet,Stone Fruit,"2.50",6,Turkey
+17,Nectarine,Red,Sweet,Stone Fruit,"2.20",4,Spain
+18,Mango,Yellow,Sweet,Tropical,"1.50",1,Brazil
+19,Pineapple,Yellow,Sweet,Tropical,"3.00",1,Thailand
+20,Papaya,Orange,Sweet,Tropical,"2.00",1,Mexico
+21,Kiwi,Green,Sweet,Tropical,"1.80",6,New Zealand
+22,Guava,Green,Sweet,Tropical,"2.50",3,India
+23,Lychee,Red,Sweet,Tropical,"4.00",10,China
+24,Passion Fruit,Purple,Sweet,Tropical,"3.00",8,Brazil
+25,Watermelon,Green,Sweet,Melon,"5.00",1,USA
+26,Cantaloupe,Orange,Sweet,Melon,"3.00",1,USA
+27,Honeydew,Green,Sweet,Melon,"3.50",1,USA
+28,Galia melon,Green,Sweet,Melon,"3.25",1,Israel
+29,Casaba melon,Yellow,Sweet,Melon,"3.75",1,Turkey
+30,Apple,Red,Sweet,Apple and Pear,"1.00",5,USA
+31,Pear,Green,Sweet,Apple and Pear,"1.20",4,USA
+32,Quince,Yellow,Sour,Apple and Pear,"2.00",2,Turkey
+33,Persimmon,Orange,Sweet,Apple and Pear,"2.20",3,Japan
+34,Green grapes,Green,Sweet,Grapes,"2.50",50,USA
+35,Red grapes,Red,Sweet,Grapes,"2.50",50,Spain
+36,Black grapes,Black,Sweet,Grapes,"2.75",50,Italy
+37,Concord grapes,Purple,Sweet,Grapes,"3.00",40,USA
+38,Muscat grapes,Green,Sweet,Grapes,"3.50",30,France
+39,Dragon fruit,Pink,Sweet,Exotic,"5.00",1,Vietnam
+40,Durian,Yellow,Bitter,Exotic,"10.00",1,Thailand
+41,Jackfruit,Green,Sweet,Exotic,"4.00",1,India
+42,Star fruit,Yellow,Sour,Exotic,"3.00",5,Malaysia
+43,Rambutan,Red,Sweet,Exotic,"4.50",10,Indonesia
+44,Mangosteen,Purple,Sweet,Exotic,"5.00",6,Thailand
+45,Banana,Yellow,Sweet,Other,"0.50",12,Ecuador
+46,Fig,Purple,Sweet,Other,"2.00",8,Turkey
+47,Pomegranate,Red,Sour,Other,"2.50",1,India
+48,Avocado,Green,Creamy,Other,"1.50",2,Mexico
+49,Olive,Green,Bitter,Other,"3.00",50,Spain
+50,Soursop,Green,Tangy,Tropical,"3.50",1,Brazil
+51,Date,Brown,Sweet,Other,"1.80",10,Egypt
+52,Coconut,Brown,Sweet,Tropical,"2.50",1,Philippines
+53,Kumquat,Orange,Tart,Citrus,"2.00",30,China
+54,Feijoa,Green,Sweet,Tropical,"3.00",5,New Zealand
+55,Persian lime,Green,Sour,Citrus,"1.00",10,Mexico
+56,Blood orange,Red,Sweet,Citrus,"1.50",4,Italy
+57,Kiwano (Horned melon),Orange,Bitter,Tropical,"4.00",1,Kenya
+58,Cherimoya,Green,Sweet,Tropical,"5.00",1,Peru
+59,Sapodilla,Brown,Sweet,Tropical,"3.00",2,Mexico
+60,Miracle fruit,Red,Sweet,Exotic,"5.00",5,West Africa
+61,Pawpaw,Green,Sweet,Tropical,"3.50",1,USA
+62,Prickly pear,Green,Sweet,Tropical,"2.00",3,Mexico
+63,Loquat,Yellow,Sweet,Other,"2.50",10,Japan
+64,Mamoncillo,Green,Sweet,Tropical,"3.00",12,Caribbean
+65,Star apple,Purple,Sweet,Tropical,"4.00",1,Vietnam
+66,Tamarillo,Red,Bitter,Tropical,"2.50",5,New Zealand
+67,Guinep,Green,Sweet,Tropical,"1.50",20,Caribbean
+68,Chokeberry,Black,Sour,Berry,"2.00",15,USA
+69,Sea buckthorn,Orange,Sour,Berry,"4.50",30,Russia
+70,Pitaya (Dragon fruit),Pink,Sweet,Tropical,"5.00",1,Vietnam
+71,Honeycrisp Apple,Red,Sweet,Temperate,"2.00",6,USA
+72,Carambola (Star Fruit),Yellow,Sweet,Tropical,"2.00",5,Malaysia
+73,White Sapote,Green,Sweet,Tropical,"2.75",2,Mexico
+74,Canistel (Egg Fruit),Yellow,Sweet,Tropical,"3.00",3,USA
+75,Black Sapote,Green,Sweet,Tropical,"4.00",2,Australia
+76,Lucuma,Green,Sweet,Tropical,"4.50",1,Peru
+77,Longan,Brown,Sweet,Tropical,"2.00",15,Thailand
+78,Langsat,Yellow,Sweet,Tropical,"3.50",10,Indonesia
+79,Mulberry,Black,Sweet,Berry,"2.00",20,USA
+80,Boysenberry,Dark purple,Sweet,Berry,"3.00",10,New Zealand
+81,Jabuticaba,Purple,Sweet,Tropical,"4.50",30,Brazil
+82,Salak (Snake Fruit),Brown,Sweet,Tropical,"3.00",5,Indonesia
+83,Yuzu,Yellow,Sour,Citrus,"1.50",4,Japan
+84,Ugli Fruit,Green,Sweet,Citrus,"2.00",1,Jamaica
+85,Monstera Deliciosa,Green,Sweet,Exotic,"5.50",2,Mexico
+86,White Dragon Fruit,White,Sweet,Tropical,"4.50",1,Vietnam
+87,Physalis (Cape Gooseberry),Yellow,Sweet,Berry,"2.50",20,Colombia
+88,Tamarind,Brown,Sour,Tropical,"1.00",10,India
+89,Custard Apple,Green,Sweet,Tropical,"3.50",1,India
+90,Passionfruit,Purple,Sweet,Tropical,"3.00",6,Australia
+91,Kakadu Plum,Green,Tart,Tropical,"4.50",5,Australia
+92,Granadilla,Orange,Sweet,Tropical,"3.00",8,Colombia
+93,Chayote,Green,Mild,Other,"1.50",1,Costa Rica
+94,Pepino Melon,Purple,Sweet,Tropical,"2.50",3,Chile
+95,Horned Melon (Kiwano),Green,Unique,Tropical,"4.00",1,Kenya
+96,Jujube,Red,Sweet,Other,"2.50",15,China
+97,Sugar Apple,Green,Sweet,Tropical,"3.00",1,India
+98,Atemoya,Green,Sweet,Tropical,"5.00",1,USA
+99,Cloudberry,Orange,Sweet,Berry,"7.00",5,Scandinavia
+100,Maracuya,Yellow,Sour,Tropical,"3.00",6,Brazil
