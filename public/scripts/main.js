@@ -8,74 +8,82 @@ let page = 1;
 let currentPage = 0;
 let pages = [];
 let filteredData;
+let csvData;
+let arc;
+let arcHover;
+
+//load the data and store it in a variable
+d3.csv("FruitTest20240401.csv").then((data) => {
+  //filter the data
+  filteredData = dataFilter(data);
+
+  buildChart(filteredData[currentPage]);
+});
 
 //add button that will change page
+
 d3.select("body")
   .append("button")
+  .attr("id", "nextButton")
   .text("Next Page")
   .on("click", () => {
     currentPage++;
-    if (currentPage > pages.length) {
-      currentPage = 1;
+    let pageCounter =  pages.length -1;
+    if (currentPage > pageCounter) { 
+      currentPage = pageCounter;
     }
+    d3.select("svg").selectAll("*").remove();
     //clear the svg
     filteredData = pages[page - 1];
-    updateChart();
+    buildChart(filteredData);
+
+    if (currentPage >= 1) {
+      d3.select("button#prevButton").style("display", "block");
+    }
+
+    if (currentPage >=  (pages.length-1)) {
+      d3.select("button#nextButton").style("display", "none");
+    }
+
+    
   });
 
+//add button that will change pag 
+d3.select("body")
+  .append("button")
+  .attr("id", "prevButton")
+  .text("Previous Page")
+  .style("display", "none")
+  .on("click", () => {
+    
+    currentPage--;
+    
+    if (currentPage <= 0) {
+      currentPage = 1;
+    }
 
-function updateChart() {
-  const svg = d3.select("#mySvg").attr("width", width).attr("height", height);
+    d3.select("svg").selectAll("*").remove();
+    
+    //clear the svg
+    filteredData = pages[currentPage - 1];
+    
+    buildChart(filteredData);
 
-  // Clear the SVG
-  svg.selectAll("*").remove();
+    //hide button if on first page
+    if (currentPage == 1) {
+      d3.select("button#prevButton").style("display", "none");
+    }
 
-  let g = svg
-    .select("g")
-    .attr("transform", `translate(${width / 2}, ${height / 2})`);
+    if (currentPage == 1) {
+      d3.select("button#nextButton").style("display", "block");
+    }
 
-  let pie = d3.pie().value((d) => d.AvgCost)(filteredData);
+  });
 
-  let arc = d3
-    .arc()
-    .innerRadius(radius / 2)
-    .outerRadius(radius);
-
-  let arcHover = d3
-    .arc()
-    .innerRadius(radius / 2 - 10)
-    .outerRadius(radius + 20);
-
-  let arcs = g
-  .selectAll(".arc") // Changed "arc" to ".arc"
-  .data(pie)
-  .enter()
-  .append("g")
-  .attr("class", "arc"); // Added this line
-
-  arcs.select("path").attr("d", arc);
-
-  arcs
-    .select("text")
-    .attr("transform", function (d) {
-      return "translate(" + arc.centroid(d) + ")";
-    })
-    .attr("dy", "0")
-    .text(function (d) {
-      return d.data.Fruit;
-    });
-}
-//load the data and store it in a variable
-let csvData = d3.csv("FruitTest20240401.csv").then((data) => {
-  return data;
-});
-
+//Functions
 
 // Load the data
-d3.csv("FruitTest20240401.csv").then((data) => {
-  //manipulate data here
-  filteredData = dataFilter(data);
-
+function buildChart(filteredData) {
   //build chart her
   const svg = d3.select("#mySvg").attr("width", width).attr("height", height);
 
@@ -83,14 +91,14 @@ d3.csv("FruitTest20240401.csv").then((data) => {
     .append("g")
     .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
-  let pie = d3.pie().value((d) => d.AvgCost)(filteredData[0]);
+  let pie = d3.pie().value((d) => d.AvgCost)(filteredData);
 
-  let arc = d3
+  arc = d3
     .arc()
     .innerRadius(radius / 2)
     .outerRadius(radius);
 
-  let arcHover = d3
+  arcHover = d3
     .arc()
     .innerRadius(radius / 2 - 10)
     .outerRadius(radius + 20);
@@ -120,60 +128,55 @@ d3.csv("FruitTest20240401.csv").then((data) => {
     .text(function (d) {
       return d.data.Fruit;
     });
+}
+function dataFilter(data) {
+  // Filter the data
+  data = data.filter((d) => {
+    return d.Type == "Citrus";
+  });
 
-  function dataFilter(data) {
-    // Filter the data
-    let filteredData = data.filter((d) => {
-      return d.Type == "Citrus";
-    });
+  let sortedData = data.sort((a, b) => a.Fruit.localeCompare(b.Fruit));
 
-    let sortedData = filteredData.sort((a, b) =>
-      a.Fruit.localeCompare(b.Fruit)
-    );
+  //add a page column and we will break the data into pages of 10
+  sortedData.forEach((d, i) => {
+    d.AvgCost = +d.AvgCost; // Convert to number
 
-    //add a page column and we will break the data into pages of 10
-    sortedData.forEach((d, i) => {
-      d.AvgCost = +d.AvgCost; // Convert to number
-
-      d.page = page; // Add page number
-      if ((i + 1) % 10 == 0) {
-        page++;
-      }
-      /*****************************/
-    });
-
-    //create pages
-    for (let i = 1; i <= page; i++) {
-      let pageData = sortedData.filter((d) => d.page == i);
-      pages.push(pageData);
+    d.page = page; // Add page number
+    if ((i + 1) % 10 == 0) {
+      page++;
     }
+    /*****************************/
+  });
 
-    console.log(pages);
-
-    return pages;
+  //create pages
+  for (let i = 1; i <= page; i++) {
+    let pageData = sortedData.filter((d) => d.page == i);
+    pages.push(pageData);
   }
 
-  function mouseOver(event, d) {
-    d3.select(this).transition().duration(500).attr("d", arcHover);
+  return pages;
+}
 
-    tooltip.style("opacity", 1);
-    tooltip
-      .html(
-        "Category: " +
-          d.data.Fruit +
-          "<br/>" +
-          d.data.Type +
-          "<br/>" +
-          "Value: " +
-          d.data.AvgCost
-      )
-      .style("left", event.pageX + "px")
-      .style("top", event.pageY - 10 + "px");
-  }
+function mouseOver(event, d) {
+  d3.select(this).transition().duration(500).attr("d", arcHover);
 
-  function mouseOut(event, d) {
-    d3.select(this).transition().duration(500).attr("d", arc);
+  tooltip.style("opacity", 1);
+  tooltip
+    .html(
+      "Category: " +
+        d.data.Fruit +
+        "<br/>" +
+        d.data.Type +
+        "<br/>" +
+        "Value: " +
+        d.data.AvgCost
+    )
+    .style("left", event.pageX + "px")
+    .style("top", event.pageY - 10 + "px");
+}
 
-    tooltip.style("opacity", 0);
-  }
-});
+function mouseOut(event, d) {
+  d3.select(this).transition().duration(500).attr("d", arc);
+
+  tooltip.style("opacity", 0);
+}
