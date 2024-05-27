@@ -2,3 +2,10 @@
 {
   background-color: wheat;
 }
+
+.outerArc
+{
+  fill: none;
+  stroke: none;
+  stroke-width: 2;
+}
