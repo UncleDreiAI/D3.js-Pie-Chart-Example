@@ -88,7 +88,7 @@ function buildChart(filteredData) {
     .append("g")
     .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
-  let pie = d3.pie().value((d) => d.AvgCost)(filteredData);
+  let pie = d3.pie().value((d) => d.Count)(filteredData);
 
   arc = d3
     .arc()
@@ -141,7 +141,7 @@ function buildChart(filteredData) {
     })
     .attr("padding", 10)
     .text(function (d) {
-      return d.data.Fruit;
+      return d.data.Type;
     });
 
   labels.each(function (d) {
@@ -150,42 +150,62 @@ function buildChart(filteredData) {
     d.length = bbox.width;
   });
 
-
   arcs
     .append("polyline")
     .attr("points", function (d) {
       var startingPoint = arc.centroid(d);
       //check if the label is on the right side or left side
-      var midPoint = [outerArc.centroid(d)[0], outerArc.centroid(d)[1]+d.bottom+5];
+      var midPoint = [
+        outerArc.centroid(d)[0],
+        outerArc.centroid(d)[1] + d.bottom + 5,
+      ];
       var midAngle = d.startAngle + (d.endAngle - d.startAngle) / 2;
       var x;
-      if( midAngle > Math.PI)
-        {
-          x = outerArc.centroid(d)[0]-d.length
-        }
-        else {
-          x = outerArc.centroid(d)[0]+d.length
-        }
-      var endingPoint = [x, outerArc.centroid(d)[1]+d.bottom+5];
-    return [startingPoint,midPoint, endingPoint];
-  
+      if (midAngle > Math.PI) {
+        x = outerArc.centroid(d)[0] - d.length;
+      } else {
+        x = outerArc.centroid(d)[0] + d.length;
+      }
+      var endingPoint = [x, outerArc.centroid(d)[1] + d.bottom + 5];
+      return [startingPoint, midPoint, endingPoint];
     })
     .attr("stroke", "black")
     .attr("fill", "none");
-
-  //g.append("path").attr("d", outerArc).attr("class", "outerArc");
 }
+
 function dataFilter(data) {
   // Filter the data
-  data = data.filter((d) => {
-    return d.Type == "Citrus";
+  // data = data.filter((d) => {
+  //   return d.Type == "Citrus";
+  // });
+
+  //take only the type column
+  data = data.map((d) => {
+    return { Type: d.Type} ;
   });
 
-  let sortedData = data.sort((a, b) => a.Fruit.localeCompare(b.Fruit));
+  let typeCounts = {};
+  data.forEach((d) => {
+    if (typeCounts[d.Type]) {
+      typeCounts[d.Type]++;
+    } else {
+      typeCounts[d.Type] = 1;
+    }
+  });
+
+  data.forEach((d) => {
+    d.Count = typeCounts[d.Type];
+  });
+
+  let sortedData = data.sort((a, b) => a.Type.localeCompare(b.Type));
+
+  const groupedData = Array.from(d3.group(sortedData, d => d.Type), ([Type, data]) => ({ Type, Count: data.length }));
+  console.log(groupedData);
+
 
   //add a page column and we will break the data into pages of 10
-  sortedData.forEach((d, i) => {
-    d.AvgCost = +d.AvgCost; // Convert to number
+  groupedData.forEach((d, i) => {
+    //d.AvgCost = +d.AvgCost; // Convert to number
 
     d.page = page; // Add page number
     if ((i + 1) % 10 == 0) {
@@ -196,9 +216,10 @@ function dataFilter(data) {
 
   //create pages
   for (let i = 1; i <= page; i++) {
-    let pageData = sortedData.filter((d) => d.page == i);
+    let pageData = groupedData.filter((d) => d.page == i);
     pages.push(pageData);
   }
+  
 
   return pages;
 }
@@ -206,16 +227,20 @@ function dataFilter(data) {
 function mouseOver(event, d) {
   d3.select(this).transition().duration(500).attr("d", arcHover);
 
+
+
   tooltip.style("opacity", 1);
   tooltip
     .html(
-      "Category: " +
-        d.data.Fruit +
-        "<br/>" +
+      // "Category: " +
+      //   d.data.Color +
+      //   "<br/>" +
+        "Type: " +
         d.data.Type +
         "<br/>" +
         "Value: " +
-        d.data.AvgCost
+        d.data.Count
+        
     )
     .style("left", event.pageX + "px")
     .style("top", event.pageY - 10 + "px");
