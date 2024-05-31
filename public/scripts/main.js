@@ -200,7 +200,7 @@ function dataFilter(data) {
   let sortedData = data.sort((a, b) => a.Type.localeCompare(b.Type));
 
   const groupedData = Array.from(d3.group(sortedData, d => d.Type), ([Type, data]) => ({ Type, Count: data.length }));
-  console.log(groupedData);
+
 
 
   //add a page column and we will break the data into pages of 10
