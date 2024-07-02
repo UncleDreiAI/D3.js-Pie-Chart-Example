@@ -1,3 +1,8 @@
+/**
+ * @file This file contains the main JavaScript code for the d3_test project.
+ * It includes functions to load and filter data, build a chart using D3.js, and handle mouse events.
+ */
+
 const width = window.innerWidth - 20;
 const height = window.innerHeight - 20;
 const radius = Math.min(width, height) / 2 - 50;
@@ -79,7 +84,10 @@ d3.select("body")
 
 //Functions
 
-// Load the data
+/**
+ * Load the data and build the chart.
+ * @param {Array} filteredData - The filtered data to be used for building the chart.
+ */
 function buildChart(filteredData) {
   //build chart her
   const svg = d3.select("#mySvg").attr("width", width).attr("height", height);
@@ -173,6 +181,11 @@ function buildChart(filteredData) {
     .attr("fill", "none");
 }
 
+/**
+ * Filter the data and prepare it for building the chart.
+ * @param {Array} data - The raw data to be filtered.
+ * @returns {Array} The filtered and grouped data.
+ */
 function dataFilter(data) {
   // Filter the data
   // data = data.filter((d) => {
@@ -197,15 +210,12 @@ function dataFilter(data) {
     d.Count = typeCounts[d.Type];
   });
 
-  let sortedData = data.sort((a, b) => a.Type.localeCompare(b.Type));
+  let sortedData = data.toSorted((a, b) => a.Type.localeCompare(b.Type));
 
   const groupedData = Array.from(d3.group(sortedData, d => d.Type), ([Type, data]) => ({ Type, Count: data.length }));
 
-
-
   //add a page column and we will break the data into pages of 10
   groupedData.forEach((d, i) => {
-    //d.AvgCost = +d.AvgCost; // Convert to number
 
     d.page = page; // Add page number
     if ((i + 1) % 10 == 0) {
@@ -220,14 +230,16 @@ function dataFilter(data) {
     pages.push(pageData);
   }
   
-
   return pages;
 }
 
+/**
+ * Event handler for mouseover event on chart arcs.
+ * @param {Event} event - The mouseover event object.
+ * @param {Object} d - The data object associated with the arc.
+ */
 function mouseOver(event, d) {
   d3.select(this).transition().duration(500).attr("d", arcHover);
-
-
 
   tooltip.style("opacity", 1);
   tooltip
@@ -246,12 +258,22 @@ function mouseOver(event, d) {
     .style("top", event.pageY - 10 + "px");
 }
 
+/**
+ * Event handler for mouseout event on chart arcs.
+ * @param {Event} event - The mouseout event object.
+ * @param {Object} d - The data object associated with the arc.
+ */
 function mouseOut(event, d) {
   d3.select(this).transition().duration(500).attr("d", arc);
 
   tooltip.style("opacity", 0);
 }
 
+/**
+ * Event handler for mousemove event on chart arcs.
+ * @param {Event} event - The mousemove event object.
+ * @param {Object} d - The data object associated with the arc.
+ */
 function mouseMove(event, d) {
   // Update tooltip position
   tooltip
