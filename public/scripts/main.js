@@ -1,14 +1,28 @@
 /**
  * @file This file contains the main JavaScript code for the d3_test project.
  * It includes functions to load and filter data, build a chart using D3.js, and handle mouse events.
+ * @see {@link https://github.com/username/repo} for more information.
+ * @author UncleDreiAI
+ * @version 1.0.0
+ */
+/**
+ * @file This file contains the main JavaScript code for the d3_test project.
+ * It includes functions to load and filter data, build a chart using D3.js, and handle mouse events.
+ */
+/**
+ * @file This file contains the main JavaScript code for the d3_test project.
+ * It includes functions to load and filter data, build a chart using D3.js, and handle mouse events.
  */
 
+// Set the width and height for the chart
 const width = window.innerWidth - 20;
 const height = window.innerHeight - 20;
 const radius = Math.min(width, height) / 2 - 50;
+
+// Select the tooltip element
 const tooltip = d3.select("#tooltip");
 
-//create a pages array
+// Initialize variables
 let page = 1;
 let currentPage = 0;
 let pages = [];
@@ -18,29 +32,28 @@ let arc;
 let arcHover;
 let outerArc;
 
-//load the data and store it in a variable
+// Load the data from CSV file and build the initial chart
 d3.csv("FruitTest20240401.csv").then((data) => {
-  //filter the data
+  // Filter the data
   filteredData = dataFilter(data);
 
+  // Build the chart with the first page of filtered data
   buildChart(filteredData[currentPage]);
 });
 
-//add button that will change page
-
-d3.select("body")
+// Add a button for navigating to the next page
+d3.select("#buttonArea")
   .append("button")
   .attr("id", "nextButton")
   .text("Next Page")
   .on("click", () => {
     currentPage++;
     let pageCounter = pages.length - 1;
-    if (currentPage > pageCounter) {
+    if (currentPage >= pageCounter) {
       currentPage = pageCounter;
     }
     d3.select("svg").selectAll("*").remove();
-    //clear the svg
-    filteredData = pages[page - 1];
+    filteredData = pages[currentPage];
     buildChart(filteredData);
 
     if (currentPage >= 1) {
@@ -52,8 +65,8 @@ d3.select("body")
     }
   });
 
-//add button that will change pag
-d3.select("body")
+// Add a button for navigating to the previous page
+d3.select("#buttonArea")
   .append("button")
   .attr("id", "prevButton")
   .text("Previous Page")
@@ -66,30 +79,23 @@ d3.select("body")
     }
 
     d3.select("svg").selectAll("*").remove();
-
-    //clear the svg
     filteredData = pages[currentPage - 1];
-
     buildChart(filteredData);
 
-    //hide button if on first page
     if (currentPage == 1) {
       d3.select("button#prevButton").style("display", "none");
     }
 
-    if (currentPage == 1) {
+    if (currentPage > 1) {
       d3.select("button#nextButton").style("display", "block");
     }
   });
-
-//Functions
 
 /**
  * Load the data and build the chart.
  * @param {Array} filteredData - The filtered data to be used for building the chart.
  */
 function buildChart(filteredData) {
-  //build chart her
   const svg = d3.select("#mySvg").attr("width", width).attr("height", height);
 
   let g = svg
@@ -149,7 +155,7 @@ function buildChart(filteredData) {
     })
     .attr("padding", 10)
     .text(function (d) {
-      return d.data.Type;
+      return d.data.Fruit;
     });
 
   labels.each(function (d) {
@@ -162,7 +168,6 @@ function buildChart(filteredData) {
     .append("polyline")
     .attr("points", function (d) {
       var startingPoint = arc.centroid(d);
-      //check if the label is on the right side or left side
       var midPoint = [
         outerArc.centroid(d)[0],
         outerArc.centroid(d)[1] + d.bottom + 5,
@@ -181,20 +186,16 @@ function buildChart(filteredData) {
     .attr("fill", "none");
 }
 
+
 /**
- * Filter the data and prepare it for building the chart.
- * @param {Array} data - The raw data to be filtered.
- * @returns {Array} The filtered and grouped data.
+ * Filters and processes data to generate grouped and paginated results.
+ *
+ * @param {Array} data - The input data to be filtered and processed.
+ * @returns {Array} - The grouped and paginated data.
  */
 function dataFilter(data) {
-  // Filter the data
-  // data = data.filter((d) => {
-  //   return d.Type == "Citrus";
-  // });
-
-  //take only the type column
-  data = data.map((d) => {
-    return { Type: d.Type} ;
+  data = data.filter((d) => {
+    return d.Type != "";
   });
 
   let typeCounts = {};
@@ -212,24 +213,25 @@ function dataFilter(data) {
 
   let sortedData = data.toSorted((a, b) => a.Type.localeCompare(b.Type));
 
-  const groupedData = Array.from(d3.group(sortedData, d => d.Type), ([Type, data]) => ({ Type, Count: data.length }));
+  const groupedData = Array.from(
+    d3.group(sortedData, (d) => d.Fruit),
+    ([Fruit, data]) => ({ Fruit, AvgCost: data[0].AvgCost, Count: data.length })
+  );
 
-  //add a page column and we will break the data into pages of 10
   groupedData.forEach((d, i) => {
-
     d.page = page; // Add page number
     if ((i + 1) % 10 == 0) {
       page++;
     }
-    /*****************************/
   });
 
-  //create pages
   for (let i = 1; i <= page; i++) {
     let pageData = groupedData.filter((d) => d.page == i);
-    pages.push(pageData);
+    if (pageData.length > 0) {
+      pages.push(pageData);
+    }
   }
-  
+
   return pages;
 }
 
@@ -243,17 +245,7 @@ function mouseOver(event, d) {
 
   tooltip.style("opacity", 1);
   tooltip
-    .html(
-      // "Category: " +
-      //   d.data.Color +
-      //   "<br/>" +
-        "Type: " +
-        d.data.Type +
-        "<br/>" +
-        "Value: " +
-        d.data.Count
-        
-    )
+    .html("Type: " + d.data.Fruit + "<br/>" + "Value: " + d.data.AvgCost)
     .style("left", event.pageX + "px")
     .style("top", event.pageY - 10 + "px");
 }
@@ -275,7 +267,6 @@ function mouseOut(event, d) {
  * @param {Object} d - The data object associated with the arc.
  */
 function mouseMove(event, d) {
-  // Update tooltip position
   tooltip
     .style("left", event.pageX + 10 + "px")
     .style("top", event.pageY - 10 + "px");
