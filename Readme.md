@@ -6,7 +6,7 @@ This project is an example of creating a pie chart using D3.js.
 
 To use this example, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/your-username/D3.js-Pie-Chart-Example.git`
+1. Clone the repository: `git clone https://github.com/UncleDreiAI/D3.js-Pie-Chart-Example.git`
 2. Navigate to the project directory: `cd D3.js-Pie-Chart-Example`
 3. Open `index.html` in your preferred web browser.
 
