@@ -52,7 +52,7 @@ This project has the following dependencies:
 
 ## Contributing
 
-Contributions are welcome! If you have any suggestions or improvements, please submit a pull request or issue.
+Contributions are welcome! If you have any suggestions or improvements, please submit a pull request or submit a issue.
 
 ## License
 
