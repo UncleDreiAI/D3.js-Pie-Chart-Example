@@ -1,3 +1,5 @@
+import * as d3 from "d3";
+
 /**
  * @file This file contains the main JavaScript code for the d3_test project.
  * It includes functions to load and filter data, build a chart using D3.js, and handle mouse events.
@@ -33,7 +35,7 @@ let arcHover;
 let outerArc;
 
 // Load the data from CSV file and build the initial chart
-d3.csv("FruitTest20240401.csv").then((data) => {
+d3.csv("/FruitTest20240401.csv").then((data) => {
   // Filter the data
   filteredData = dataFilter(data);
 
@@ -186,7 +188,6 @@ function buildChart(filteredData) {
     .attr("fill", "none");
 }
 
-
 /**
  * Filters and processes data to generate grouped and paginated results.
  *
@@ -211,7 +212,15 @@ function dataFilter(data) {
     d.Count = typeCounts[d.Type];
   });
 
-  let sortedData = data.toSorted((a, b) => a.Type.localeCompare(b.Type));
+  const sortedData = data.toSorted((a, b) => {
+    if (a.property && b.property) {
+      return a.property.localeCompare(b.property);
+    }
+    // Handle cases where a.property or b.property is undefined
+    if (!a.property) return 1;
+    if (!b.property) return -1;
+    return 0;
+  });
 
   const groupedData = Array.from(
     d3.group(sortedData, (d) => d.Fruit),

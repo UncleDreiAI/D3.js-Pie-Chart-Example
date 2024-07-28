@@ -11,10 +11,12 @@
 /bin/
 /build/
 /dist/
+.parcel-cache/
 
 # Ignore package manager directories
 /node_modules/
 /packages/
+
 
 # Ignore log files
 *.log
