@@ -155,7 +155,7 @@ function buildChart(filteredData) {
     })
     .attr("padding", 10)
     .text(function (d) {
-      return d.data.Fruit;
+      return d.data.Type + " (" + d.data.Pct + ")";
     });
 
   labels.each(function (d) {
@@ -186,7 +186,6 @@ function buildChart(filteredData) {
     .attr("fill", "none");
 }
 
-
 /**
  * Filters and processes data to generate grouped and paginated results.
  *
@@ -194,9 +193,9 @@ function buildChart(filteredData) {
  * @returns {Array} - The grouped and paginated data.
  */
 function dataFilter(data) {
-  data = data.filter((d) => {
-    return d.Type != "";
-  });
+  // data = data.filter((d) => {
+  //   return d.Type != "";
+  // });
 
   let typeCounts = {};
   data.forEach((d) => {
@@ -207,6 +206,22 @@ function dataFilter(data) {
     }
   });
 
+  let groupedTypedData = Object.keys(typeCounts).map((type) => {
+    return {
+      Type: type,
+      Count: typeCounts[type],
+      Pct: (typeCounts[type] / data.length) * 100 + "%",
+    };
+  });
+
+  const subtotalCount = groupedTypedData.reduce(
+    (acc, item) => acc + item.Count,
+    0
+  );
+
+  console.log(subtotalCount);
+
+  // Add the count of each type to the data
   data.forEach((d) => {
     d.Count = typeCounts[d.Type];
   });
@@ -215,18 +230,23 @@ function dataFilter(data) {
 
   const groupedData = Array.from(
     d3.group(sortedData, (d) => d.Fruit),
-    ([Fruit, data]) => ({ Fruit, AvgCost: data[0].AvgCost, Count: data.length })
+    ([Fruit, data]) => ({
+      Fruit,
+      AvgCost: data[0].AvgCost,
+      Count: data.length,
+      QtyPck: data[0].QtyPck,
+    })
   );
 
-  groupedData.forEach((d, i) => {
+  groupedTypedData.forEach((d, i) => {
     d.page = page; // Add page number
-    if ((i + 1) % 10 == 0) {
+    if ((i + 1) % 3 == 0) {
       page++;
     }
   });
 
   for (let i = 1; i <= page; i++) {
-    let pageData = groupedData.filter((d) => d.page == i);
+    let pageData = groupedTypedData.filter((d) => d.page == i);
     if (pageData.length > 0) {
       pages.push(pageData);
     }
@@ -245,7 +265,7 @@ function mouseOver(event, d) {
 
   tooltip.style("opacity", 1);
   tooltip
-    .html("Type: " + d.data.Fruit + "<br/>" + "Value: " + d.data.AvgCost)
+    .html("Type: " + d.data.Type + "<br/>" + "Value: " + d.data.Count)
     .style("left", event.pageX + "px")
     .style("top", event.pageY - 10 + "px");
 }
