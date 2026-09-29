@@ -4,6 +4,8 @@ This project is an example of creating a pie chart using D3.js.
 
 ## Installation
 
+The npm server requires Node.js 20 or Node.js 22 and newer. The dependency lockfile includes a package that does not support Node.js 21.
+
 To use this example, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/UncleDreiAI/D3.js-Pie-Chart-Example.git`
